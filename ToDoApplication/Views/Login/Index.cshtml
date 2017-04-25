@@ -1,0 +1,49 @@
+﻿@model ToDoApplication.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<body>
+    <div> 
+        <h2>ToDo List Manager</h2>
+        <h6>Provide your details to log in</h6>
+        <hr />
+
+        @if (ViewBag.InvalidLogIn != null)
+        {
+            <p class="alert-warning">@ViewBag.InvalidLogIn</p>
+
+        }
+
+        @using (Html.BeginForm("Validate", "Login", FormMethod.Post))
+        {
+            <i>Username :</i>@Html.TextBoxFor(m => m.UserName)
+            @Html.ValidationMessageFor(x => x.UserName) <br />
+
+
+            <i>Password :</i>@Html.TextBoxFor(m => m.Password)
+            @Html.ValidationMessageFor(x => x.Password) <br />
+
+            <input id="Submit1" type="submit" value="Login" />
+            @Html.ActionLink("Register here", "Register")<br/>
+          
+        }
+        @if (TempData["RegistrationSucess"] != null)
+        {
+            <p class="alert-success">@TempData["RegistrationSucess"]</p>
+
+        }
+    </div>
+</body>
+</html>

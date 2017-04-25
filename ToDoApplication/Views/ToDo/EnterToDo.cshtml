@@ -1,0 +1,130 @@
+﻿@model ToDoApplication.ViewModel.TasksVM
+@using ToDoApplication.Models;
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Enter ToDo</title>
+</head>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<body>
+    <h2>Welcome @Session["UserName"]</h2>
+    <h4>Create a Task</h4> <hr />
+    <div>
+        @*@using (Html.BeginForm("Submit", "ToDo", FormMethod.Post))
+        { This html helper form is commented as it was making full postback(can b checked under Response tab of Network section on ctrl+shift+i (google chrome developer tool) shows this   *@ 
+        <form id="frm1">
+
+            <i>Enter Task Code :</i> @Html.TextBoxFor(m => m.Tasks.TaskCode)
+            @Html.ValidationMessageFor(x => x.Tasks.TaskCode)<br />
+
+            <i>Enter Task Name :</i> @Html.TextBoxFor(m => m.Tasks.TaskName)
+            @Html.ValidationMessageFor(x => x.Tasks.TaskName)<br />
+
+            <i>Enter Task Description :</i> @Html.TextAreaFor(m => m.Tasks.TaskDescription)
+            @Html.ValidationMessageFor(x => x.Tasks.TaskDescription)<br />
+
+            <i>Mark Status:</i> @Html.CheckBoxFor(m => m.Tasks.IsComplete)
+            @Html.ValidationMessageFor(x => x.Tasks.IsComplete)<br />
+
+            <i>Date:</i> @Html.EditorFor(m => m.Tasks.EnteredDate)
+            @Html.ValidationMessageFor(x => x.Tasks.EnteredDate)<br />
+
+            <i>Assigned To:</i>@Html.DropDownList("AssignedTo", new SelectList(@ViewBag.users), "Select a user")<br />
+            @Html.ValidationMessageFor(x => x.Tasks.AssignedTo)<br />
+
+
+        </form>
+
+            @*<input id="Submit1" type="submit" value="Create Task" />
+            <input id="Submit1" type="submit" value="Update the loaded Task" />
+            <input id="Submit1" type="submit" value="Delete the loaded Task" />*@
+        @*}*@
+        <input id="Btn" type="button" value="Create Task" onclick="SendData()" /> @*made as button type as submit buttun makes full post back *@
+        <input id="btn2" type="button" value="Update the loaded Task" onclick="" />
+        <input id="btn3" type="button" value="Delete the loaded Task" onclick="" />
+       
+        <br /><br />
+        <h4>List of All the Tasks</h4> <hr />
+
+        <div id="Status"></div>
+        <table id="tbl1">
+            <tr>
+                <td><strong>Task Code</strong></td>
+                <td><strong>Task Name</strong></td>
+                <td><strong>Task Description</strong></td>
+                <td><strong>Status</strong></td>
+                <td><strong>Entered Date</strong></td>
+                <td><strong>AssignedTo</strong></td>
+                <td><strong>Select to Update/Delete</strong></td>
+            </tr>
+        </table>
+
+        <script language="javascript">
+            //loading text is displayed until entries are loaded unsynchronously
+            $("#status").text("Loading...");
+
+            //Get records 
+            $.get("GetTasks", null, BindData);
+            function BindData(Tasks)
+            {
+                debugger;//was trying to debug ==> Not working
+                var tbl1 = $("#tbl1")//reference of table object
+         
+                for(var j=0;j<Tasks.length;j++)
+                {
+                    debugger;
+                    var newRow = "<tr>" +
+                      "<td>" + Tasks[j].TaskCode + "</td>" +
+                      "<td>" + Tasks[j].TaskName + "</td>" +
+                      "<td>" + Tasks[j].TaskDescription + "</td>" +
+                      "<td>" + Tasks[j].IsComplete + "</td>" +
+                      "<td>" + Tasks[j].EnteredDate + "</td>" +
+                      "<td>" + Tasks[j].AssignedTo + "</td>" +
+                      //was trying to put a select link as the last column for each record
+                  "</tr>" ;
+                    tbl1.append(newRow);
+                }
+       
+                $("#status").text(""); //to remove loading text
+            }//BindData ends here
+
+            //We make a post using SendData
+            function SendData()
+            {
+                //Get refence of the html form frm1
+                //serialize the data
+                debugger;
+                
+                $("#status").text("Adding the task.. please wait....");
+                var frm = $("#frm1").serialize();
+                debugger;
+                $.post("Submit", frm, BindData);//BindData is called to refresh the list of task on addition of new task
+                debugger;
+
+
+                //clear off all the fields after a sucessfull post
+                $("#Tasks_TaskCode").val("");
+                $("#Tasks_TaskName").val("");
+                $("#Tasks_TaskDescription").val("");
+                $("#Tasks_IsComplete").val("");
+                $("#Tasks_EnteredDate").val("");
+                $("#AssignedTo").val(""); 
+            }
+
+
+        </script>
+    </div>
+    <hr/>
+@Html.ActionLink("Logout", "LogOut")
+</body>
+</html>

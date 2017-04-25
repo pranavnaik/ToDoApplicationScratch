@@ -1,0 +1,41 @@
+﻿@model ToDoApplication.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+</head>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<body>
+    <div> 
+        @using (Html.BeginForm("Register", "Login", FormMethod.Post))
+        {
+            <i>Enter a UserCode :</i>@Html.TextBoxFor(m => m.UserCode)
+            @Html.ValidationMessageFor(x => x.UserCode) <br />
+
+            <i>Enter a Username :</i>@Html.TextBoxFor(m => m.UserName)
+            @Html.ValidationMessageFor(x => x.UserName) <br />
+
+            <i>Enter a Password :</i>@Html.TextBoxFor(m => m.Password)
+            @Html.ValidationMessageFor(x => x.Password) <br />
+
+            <i>Retype a Password :</i><input name="RetypePassword" type="text"/>
+            @Html.ValidationMessageFor(x => x.Password) <br />
+
+            <input id="Submit1" type="submit" value="Register" />
+            @Html.ActionLink("Back to Login Page", "Index")
+
+        }
+
+    </div>
+</body>
+</html>
